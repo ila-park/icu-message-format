@@ -27,8 +27,12 @@ function showResult() {
 
     const vars = {};
 
-    args.map((arg) => {
-      console.log(arg);
+    args.forEach((arg) => {
+
+      if (vars[arg.arg] !== undefined) {
+        return;
+      }
+
       const $row = document.createElement('div');
       $row.classList.add('row');
 
@@ -50,9 +54,9 @@ function showResult() {
             $select.append($option);
           });
           $row.append($select);
-          vars[arg.arg] = $select.value;
+          vars[arg.arg] = $select.value || '';
           $select.addEventListener('input', () => {
-            vars[arg.arg] = $select.value;
+            vars[arg.arg] = $select.value || '';
             $resultRoot.innerHTML = fn(vars);
           });
           break;
@@ -62,10 +66,12 @@ function showResult() {
           $input.type = 'number';
           $input.value = 0;
           $row.append($input);
-          vars[arg.arg] = $input.value;
+          vars[arg.arg] = $input.value || '';
           $input.addEventListener('input', () => {
-            vars[arg.arg] = $input.value;
+            vars[arg.arg] = $input.value || '';
             $resultRoot.innerHTML = fn(vars);
+            delete vars[arg.arg];
+            console.log(vars)
           });
           break;
 
@@ -76,21 +82,20 @@ function showResult() {
               $input.classList.add('form-input');
               $input.value = new Date().toISOString().slice(0, 10);
               $row.append($input);
-              vars[arg.arg] = $input.value;
+              vars[arg.arg] = $input.value || '';
               $input.addEventListener('input', () => {
-                vars[arg.arg] = $input.value;
+                vars[arg.arg] = $input.value || '';
                 $resultRoot.innerHTML = fn(vars);
               })
               break;
-              
+
             case 'number':
               var $input = document.createElement('input');
-              $input.type = 'number';
-              $input.value = 0;
+              $input.value = '';
               $row.append($input);
-              vars[arg.arg] = $input.value;
+              vars[arg.arg] = $input.value || '';
               $input.addEventListener('input', () => {
-                vars[arg.arg] = $input.value;
+                vars[arg.arg] = $input.value || '';
                 $resultRoot.innerHTML = fn(vars);
               });
             break;
@@ -100,9 +105,9 @@ function showResult() {
           var $input = document.createElement('input');
           $input.classList.add('form-input');
           $row.append($input);
-          vars[arg.arg] = $input.value;
+          vars[arg.arg] = $input.value || '';
           $input.addEventListener('input', () => {
-            vars[arg.arg] = $input.value;
+            vars[arg.arg] = $input.value || '';
             $resultRoot.innerHTML = fn(vars);
           })
           break;
